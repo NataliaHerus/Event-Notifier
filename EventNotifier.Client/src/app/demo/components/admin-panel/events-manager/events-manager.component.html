@@ -1,0 +1,214 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toast></p-toast>
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="my-2">
+                        <button pButton pRipple label="Створити" icon="pi pi-plus" class="p-button-success mr-2"
+                            (click)="openNew()"></button>
+                        <button pButton pRipple label="Видалити" icon="pi pi-trash" class="p-button-danger"
+                            (click)="deleteSelectedProducts()"
+                            [disabled]="!selectedEvents || !selectedEvents.length"></button>
+                    </div>
+                </ng-template>
+            </p-toolbar>
+
+            <p-table #dt [value]="events" [columns]="cols" responsiveLayout="scroll" [rows]="10"
+                [globalFilterFields]="['name','category.name','format.name']" [rows]="10" [paginator]="true"
+                [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Показано від {first} до {last} з {totalRecords} подій"
+                [(selection)]="selectedEvents" selectionMode="multiple" [rowHover]="true" dataKey="id">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Керувати подіями</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Знайти..."
+                                class="w-full sm:w-auto" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th pSortableColumn="name">Назва <p-sortIcon field="event.name"></p-sortIcon>
+                        </th>
+                        <th style="text-align: center;" pSortableColumn="category.name">Категорія <p-sortIcon
+                                field="event.category.name"></p-sortIcon>
+                        </th>
+                        <th style="text-align: center;" pSortableColumn="format.name">Формат <p-sortIcon
+                                field="event.format.name"></p-sortIcon>
+                        </th>
+                        <th style="text-align: center;" pSortableColumn="startDate">Початок <p-sortIcon
+                                field="event.startDate"></p-sortIcon>
+                        </th>
+                        <th style="text-align: center;" pSortableColumn="endDate">Кінець <p-sortIcon
+                                field="event.endtDate"></p-sortIcon>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-event>
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="event"></p-tableCheckbox>
+                        </td>
+                        <td>
+                                <img src="data:image/png;base64,{{event.photo}}" 
+                                [alt]="event.name" width="80">
+                            <span class="image-text ml-2 text-500 font-medium">{{event.name.toUpperCase()}}</span>
+                        </td>
+                        <td style="text-align: center;">
+                            <span [class]="'event-badge category-' + event.category.name">{{event.category.name}}</span>
+                        </td>
+                        <td style="text-align: center;">
+                            {{event.format.name}}
+                        </td>
+                        <td style="text-align: center;">
+                            {{event.startDate | date: 'MM/dd/yyyy'}}
+                        </td>
+                        <td style="text-align: center;">
+                            {{event.endDate | date: 'MM/dd/yyyy'}}
+                        </td>
+                        <td>
+                            <div class="flex">
+                                <button pButton pRipple icon="pi pi-pencil"
+                                    class="p-button-rounded p-button-success mr-2"
+                                    (click)="editProduct(event)"></button>
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                                    (click)="deleteProduct(event)"></button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <p-dialog [(visible)]="eventDialog" styleClass="customDialog" header="Інформація про подію" [modal]="true"
+            class="p-fluid">
+            <ng-template pTemplate="content">
+                <ng-container *ngIf="createEventDialog === false">
+                        <img src="data:image/png;base64,{{event.photo}}" [alt]="event.name" width="250"
+                        class="mt-0 mx-auto mb-5 block shadow-2">
+                </ng-container>
+                <ng-container *ngIf="createEventDialog === true">
+                    <div class="formgrid grid" style="text-align: center; display: block; margin: 0 auto;">
+                        <div class="card">
+                            <div class="field col">
+                                <h5 *ngIf="!uploadedFile">Завантажте фото події</h5>
+                                <h5 *ngIf="uploadedFile">Завантажено</h5>
+                            </div>
+                            <div class="field col">
+                                <input type="file" style="display: none;" (change)="onFileSelected($event)" #fileUpload>
+                                <button pButton pRipple type="button" label="Вибрати файл" class="p-button-outlined"
+                                    (click)=fileUpload.click() *ngIf="!uploadedFile"></button>
+                                <span *ngIf="uploadedFile">{{uploadedFile.name}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <div class="field">
+                    <label for="name">Назва</label>
+                    <input type="text" pInputText id="name" [(ngModel)]="event.name" required autofocus
+                        [readonly]="createEventDialog === false ? true : false" />
+                </div>
+                <div class="field">
+                    <label for="description">Опис</label>
+                    <textarea id="description" style="background-color: #1e2d40;  color: white" pInputTextarea
+                        [(ngModel)]="event.description" required rows="8" cols="58"></textarea>
+                </div>
+
+                <div class="formgrid grid">
+                    <div class="field col">
+                        <label for="category">Категорія</label>
+                        <div class="dropdown-container">
+                            <select id="category" *ngIf="event && event.category" [(ngModel)]="event.category!.name"
+                                (change)="onCategoryChange(event)" class="dropdown-select">
+                                <option value="" disabled selected>Виберіть категорію</option>
+                                <option *ngFor="let category of categories"
+                                    [class]="'event-badge category-' + category.label.toLowerCase()"
+                                    [value]="category.label">
+                                    {{category.value.toUpperCase()}}</option>
+                            </select>
+                            <select id="category" *ngIf="event && !event.category" [(ngModel)]="category"
+                                class="dropdown-select">
+                                <option value="" disabled selected>Виберіть категорію</option>
+                                <option *ngFor="let category of categories"
+                                    [class]="'event-badge category-' + category.label.toLowerCase()"
+                                    [value]="category.label">
+                                    {{category.value.toUpperCase()}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="field col">
+                        <label for="format">Формат</label>
+                        <div class="dropdown-container">
+                            <select id="format" *ngIf="event && event.format" [(ngModel)]="event.format!.name"
+                                (change)="onformatChange(event)" class="dropdown-select">
+                                <option value="" disabled selected>Виберіть формат</option>
+                                <option *ngFor="let format of formats" [value]="format.label">
+                                    {{format.value.toUpperCase()}}</option>
+                            </select>
+                            <select id="category" *ngIf="event && !event.format" [(ngModel)]="format"
+                                class="dropdown-select">
+                                <option value="" disabled selected>Виберіть категорію</option>
+                                <option *ngFor="let format of formats" [value]="format.label">
+                                    {{format.value.toUpperCase()}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="formgrid grid">
+                    <div class="field col">
+                        <label>Початок</label>
+                        <input type="datetime-local" pInputText [(ngModel)]="event.startDate" />
+                    </div>
+                    <div class="field col">
+                        <label>Кінець</label>
+                        <input type="datetime-local" pInputText [(ngModel)]="event.endDate" />
+                    </div>
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Скасувати" icon="pi pi-times" class="p-button-text"
+                    (click)="hideDialog()"></button>
+                <button pButton pRipple label="Зберегти" icon="pi pi-check" class="p-button-text"
+                    (click)="saveProduct(event)"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deleteEventDialog" header="Підтвердити" [modal]="true">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span *ngIf="event">Ви впевнені що хочете видалити подію <b>{{event.name}}</b>?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Ні"
+                    (click)="deleteEventDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Так"
+                    (click)="confirmDelete()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deleteEventsDialog" header="Підтвердити" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span>Ви впевнені що хочете видалити вибрані події?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Ні"
+                    (click)="deleteEventsDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Так"
+                    (click)="confirmDeleteSelected()"></button>
+            </ng-template>
+        </p-dialog>
+    </div>
+</div>

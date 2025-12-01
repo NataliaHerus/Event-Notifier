@@ -1,0 +1,27 @@
+version: '3.4'
+
+services:
+  eventnotifier:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - identityUrl=https://localhost:7179/
+      - ConnectionStrings__DefaultConnection=Data Source=host.docker.internal;Initial Catalog=EventNotifier;User ID=<DB_USER>;Password=<DB_PASSWORD>;Encrypt=False;TrustServerCertificate=True;
+    ports:
+      - "7009:80"
+      - "7010:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  eventnotifier.identityserver:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ConnectionStrings__DefaultConnection=Data Source=host.docker.internal;Initial Catalog=EventNotifier.IdentityServer;User ID=<DB_USER>;Password=<DB_PASSWORD>;Encrypt=False;TrustServerCertificate=True;
+    ports:
+      - "7178:80"
+      - "7179:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro

@@ -1,0 +1,9 @@
+:host {
+    ::ng-deep .customDialog {
+        background-color:  #1e2d40 !important;
+        width: 500px !important;
+        height: 350px !important;
+        box-shadow: 0px 20px 20px #D8DDE680;
+        border: 1px solid rgb(231, 231, 231);
+    }
+}

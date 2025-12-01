@@ -1,0 +1,74 @@
+<div class="grid">
+	<div class="col-12">
+		<div class="card">
+			<h5>Усі події</h5>
+			<p-table #dt1 [value]="events" dataKey="id" [rows]="10" [loading]="loading" [rowHover]="true"
+				styleClass="p-datatable-gridlines" [paginator]="true"
+				[globalFilterFields]="['name','category.name','format.name']" responsiveLayout="scroll">
+				<ng-template pTemplate="caption">
+					<div class="flex justify-content-between flex-column sm:flex-row">
+						<span class="p-input-icon-left mb-2">
+							<i class="pi pi-search"></i>
+							<input pInputText type="text" #filter (input)="onGlobalFilter(dt1, $event)"
+								placeholder="Знайти за назвою" class="w-full" />
+						</span>
+					</div>
+				</ng-template>
+				<ng-template pTemplate="header" let-event>
+					<tr>
+						<th pSortableColumn="name">Назва <p-sortIcon field="event.name"></p-sortIcon>
+						</th>
+						<th pSortableColumn="category.name">Категорія <p-sortIcon
+								field="event.category.name"></p-sortIcon>
+						</th>
+						<th pSortableColumn="format.name">Формат <p-sortIcon
+								field="event.format.name"></p-sortIcon>
+						</th>
+						<th pSortableColumn="startDate">Початок <p-sortIcon field="event.startDate"></p-sortIcon>
+						</th>
+						<th pSortableColumn="endDate">Кінець <p-sortIcon field="event.endtDate"></p-sortIcon>
+						</th>
+						<th>Перегляд</th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-event>
+					<tr>
+						<td>
+							<img src="data:image/png;base64,{{event.photo}}"
+								[alt]="event.name" width="80">
+							<span class="image-text ml-2 text-500 font-medium">{{event.name.toUpperCase()}}</span>
+						</td>
+						<td style="text-align: center;">
+							<span
+								[class]="'event-badge category-' + event.category.name.toLowerCase()">{{event.category.name.toUpperCase()}}</span>
+						</td>
+						<td style="text-align: center;">
+							{{event.format.name}}
+						</td>
+						<td style="text-align: center;">
+							{{event.startDate | date: 'MM/dd/yyyy'}}
+						</td>
+						<td style="text-align: center;">
+							{{event.endDate | date: 'MM/dd/yyyy'}}
+						</td>
+						<td style="text-align: center;">
+							<button pButton pRipple type="button" icon="pi pi-search"
+								class="p-button p-component p-button-text p-button-icon-only"
+								(click)="showEventDetails(event.id)"></button>
+						</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="emptymessage">
+					<tr>
+						<td colspan="8">Не знайдено подій</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="loadingbody">
+					<tr>
+						<td colspan="8">Завантажуємо інформацію про події. Зачекайте</td>
+					</tr>
+				</ng-template>
+			</p-table>
+		</div>
+	</div>
+</div>

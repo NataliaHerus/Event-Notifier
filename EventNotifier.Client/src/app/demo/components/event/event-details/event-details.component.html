@@ -1,0 +1,43 @@
+<div class="card m-3 border-1 surface-border" ngDefaultControl style="background-color: #1e2d40; width: 600px">
+    <p-toast></p-toast>
+    <div class="flex flex-wrap gap-2 align-items-center justify-content-between mb-2">
+        <button pButton pRipple [icon]="isSaved ? 'pi pi-trash' : 'pi pi-star-fill'"
+            [label]="isSaved ? 'Видалити подію' : 'Зберегти подію'" (click)="selectEvent()"></button>
+        <div class="flex align-items-center">
+            <div class="flex flex-column align-items-center text-center mb-3">
+                <p-image src="data:image/png;base64,{{event.photo}}" alt="event?.name" width="250"
+                    [preview]="true"></p-image>
+                <div class="flex-1 flex flex-column align-items-center text-center md:text-left">
+                    <div class="text-3xl font-bold">{{event?.name}}</div>
+                    <p></p>
+                    <p-fieldset legend="Опис" [toggleable]="true" class="line-height-3 m-0">
+                        {{event?.description}}
+                    </p-fieldset>
+                    <p-divider layout="horizontal" align="center">
+                        <h5 class="p-tag" class="text-2xl font-bold">Категорія</h5>
+                    </p-divider>
+                    <input type="text" pInputText [ngModel]="event?.category?.name" size="30px"
+                        style="text-align: center; display: block; margin: 0 auto;" readonly>
+                    <p-divider layout="horizontal" align="center">
+                        <h5 class="p-tag" class="text-2xl font-bold">Формат</h5>
+                    </p-divider>
+                    <input type="text" pInputText [ngModel]="event?.format?.name" size="30px"
+                        style="text-align: center; display: block; margin: 0 auto;" readonly>
+                    <p-divider layout="horizontal" align="center">
+                        <h5 class="p-tag" class="text-2xl font-bold">Початок</h5>
+                    </p-divider>
+                    <div class="p-input-icon-right">
+                        <input type="datetime-local" pInputText [ngModel]="event?.startDate" readonly />
+                        <i class="pi pi-calendar"></i>
+                    </div>
+                    <p-divider layout="horizontal" align="center">
+                        <h5 class="p-tag" class="text-2xl font-bold">Кінець</h5>
+                    </p-divider>
+                    <div class="p-input-icon-right">
+                        <input type="datetime-local" pInputText [ngModel]="event?.endDate" readonly />
+                        <i class="pi pi-calendar"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

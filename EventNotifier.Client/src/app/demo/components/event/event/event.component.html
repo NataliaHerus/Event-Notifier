@@ -1,0 +1,75 @@
+<div class="grid">
+	<div class="col-12">
+		<div class="card">
+			<h5>Технологічні події</h5>
+			<p-dataView #dv [value]="events" [paginator]="true" [rows]="9" filterBy="name" [sortField]="sortField"
+				[sortOrder]="sortOrder" layout="grid">
+				<ng-template pTemplate="header">
+					<div class="flex flex-column md:flex-row md:justify-content-between gap-2">
+						<p-dropdown [options]="sortOptions" placeholder="Сортувати за датою"
+							(onChange)="onSortChange($event)"></p-dropdown>
+						<span class="p-input-icon-left">
+							<i class="pi pi-search"></i>
+							<input type="search" pInputText placeholder="Знайти за назвою"
+								(input)="onFilter(dv, $event)">
+						</span>
+						<p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+					</div>
+				</ng-template>
+
+				<ng-template let-event pTemplate="listItem">
+					<div class="col-12">
+						<div class="flex flex-column md:flex-row align-items-center p-3 w-full">
+							<img src="data:image/png;base64,{{event.photo}}" [alt]="event.name"
+								class="my-4 md:my-0 w-9 md:w-10rem shadow-2 mr-5" />
+							<div class="flex-1 flex flex-column align-items-center text-center md:text-left">
+								<div class="font-bold text-2xl">{{event.name}}</div>
+								<p></p>
+								<div class=" text-center mb-1">{{event.description|
+									slice:0:150}}{{event.description.length > 150 ? '...' : ''}}</div>
+								<div class="flex align-items-center mt-2">
+									<span
+										[class]="'event-badge category-' + event.category.name.toLowerCase()">{{event.category.name.toUpperCase()}}</span>
+								</div>
+								<div class="flex align-items-center justify-content-between">
+									<span class="font-semibold">Детальніша інформація: </span>
+									<button pButton pRipple type="button" icon="pi pi-search"
+										class="p-button p-component p-button-text p-button-icon-only"
+										(click)="showEventDetails(event.id)"></button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</ng-template>
+
+				<ng-template let-event pTemplate="gridItem">
+					<div class="col-12 md:col-4">
+						<div class="card m-3 border-1 surface-border" style="height: 390px; width: 350px;">
+							<div class="flex flex-wrap gap-2 align-items-center justify-content-between mb-2">
+								<div class="flex align-items-center">
+									<span
+										[class]="'event-badge category-' + event.category.name.toLowerCase()">{{event.category.name.toUpperCase()}}</span>
+								</div>
+							</div>
+							<div class="flex flex-column align-items-center text-center mb-3">
+								<img src="data:image/png;base64,{{event.photo}}" [alt]="event.name"
+									class="w-9 shadow-2 my-3 mx-0" style="height: 150px;
+								object-fit: cover;" />
+								<div class="text-2xl font-bold">{{event.name}}</div>
+								<p></p>
+								<div class="mb-1">{{event.description | slice:0:60}}{{event.description.length > 60 ?
+									'...' : ''}}</div>
+							</div>
+							<div class="flex align-items-center justify-content-between">
+								<span class="font-semibold">Детальніша інформація:</span>
+								<button pButton pRipple type="button" icon="pi pi-search"
+									class="p-button p-component p-button-text p-button-icon-only"
+									(click)="showEventDetails(event.id)"></button>
+							</div>
+						</div>
+					</div>
+				</ng-template>
+			</p-dataView>
+		</div>
+	</div>
+</div>

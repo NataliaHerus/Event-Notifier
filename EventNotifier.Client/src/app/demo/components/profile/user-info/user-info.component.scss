@@ -1,0 +1,30 @@
+.event-badge {
+    &.category-місяць {
+        background: #9dc4cd;
+        color: #2d77a5;
+    }
+
+    &.category-зорі {
+        background: #FEEDAF;
+        color: #8A5340;
+    }
+
+    &.category-метеорити{
+        background: #dc9cc5;
+        color: #b41c6f;
+    }
+
+    &.category-сонце{
+        background: #c0b9a0;
+        color: #f3ef0b;
+    }
+
+    &.category-планети{
+        background: #feafaf;
+        color: #9c2323;
+    }
+}
+
+.custom-width-button {
+    width: 400px;
+}

@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  eventnotifier:
+    image: ${DOCKER_REGISTRY-}eventnotifier
+    build:
+      context: .
+      dockerfile: EventNotifier/Dockerfile
+
+  eventnotifier.identityserver:
+    image: ${DOCKER_REGISTRY-}eventnotifieridentityserver
+    build:
+      context: .
+      dockerfile: EventNotifier.IdentityServer/Dockerfile
+

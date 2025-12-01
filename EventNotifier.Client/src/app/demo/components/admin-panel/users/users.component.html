@@ -1,0 +1,107 @@
+<div class="grid">
+	<div class="col-12">
+		<div class="card">
+			<p-toast></p-toast>
+			<h5>Усі користувачі</h5>
+			<p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="my-2">
+                        <button pButton pRipple label="Додати користувача" icon="pi pi-plus" class="p-button-success mr-2"
+                            (click)="addNewUser()"></button>
+                    </div>
+                </ng-template>
+            </p-toolbar>
+			<p-table #dt1 [value]="users" dataKey="id" [rows]="10" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" [globalFilterFields]="['name','category.name','format.name']" responsiveLayout="scroll">
+				<ng-template pTemplate="caption">
+					<div class="flex justify-content-between flex-column sm:flex-row">
+						<span class="p-input-icon-left mb-2">
+							<i class="pi pi-search"></i>
+							<input pInputText type="text" #filter (input)="onGlobalFilter(dt1, $event)" placeholder="Знайти..." class="w-full"/>
+						</span>
+					</div>
+				</ng-template>
+				<ng-template pTemplate="header" let-event>
+					<tr>
+                        <th pSortableColumn="lastName">Прізвище <p-sortIcon field="user.lastName"></p-sortIcon>
+						</th>
+                        <th pSortableColumn="firstName">Ім'я<p-sortIcon field="user.firstName"></p-sortIcon>
+						</th> <th pSortableColumn="email">Електронна пошта<p-sortIcon field="user.email"></p-sortIcon>
+						</th>
+						<th style="width: 5rem"></th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-user>
+					<tr>
+                        <td style="text-align: center;">
+							{{user.lastName}}
+						</td>
+						<td style="text-align: center;">
+							{{user.firstName}}
+						</td>
+						<td style="text-align: center;">
+							{{user.email}}
+						</td>
+						<td>
+                            <div class="flex">
+                                <button pButton pRipple icon="pi pi-pencil"
+                                    class="p-button-rounded p-button-success mr-2"
+                                    (click)="editUser(user)"></button>
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                                    (click)="deleteUser(user)"></button>
+                            </div>
+                        </td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="emptymessage">
+					<tr>
+						<td colspan="8">Не знайдено користувачів</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="loadingbody">
+					<tr>
+						<td colspan="8">Завантажуємо інформацію про користувачів. Зачекайте</td>
+					</tr>
+				</ng-template>
+    		</p-table>
+		</div>
+
+		<p-dialog [(visible)]="userDialog" styleClass="customDialog" header="Інформація про користувача" [modal]="true"
+            class="p-fluid" (onHide)="hideDialog()">
+            <ng-template pTemplate="content">
+                <div class="field">
+                    <label for="name">Ім'я</label>
+                    <input type="text" pInputText id="name" [(ngModel)]="user.firstName" required autofocus/>
+				</div>
+				<div class="field">
+                    <label for="name">Прізвище</label>
+                    <input type="text" pInputText id="name" [(ngModel)]="user.lastName" required autofocus />
+				</div>
+				<div class="field">
+                    <label for="name">Електронна пошта</label>
+                    <input type="text" pInputText id="name" [(ngModel)]="user.email" required autofocus />
+				</div>
+			</ng-template>
+
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Скасувати" icon="pi pi-times" class="p-button-text"
+                    (click)="hideDialog()"></button>
+                <button pButton pRipple label="Зберегти" icon="pi pi-check" class="p-button-text"
+                    (click)="saveUser(user)"></button>
+            </ng-template>
+        </p-dialog>
+
+		<p-dialog [(visible)]="deleteUserDialog" header="Підтвердити" [modal]="true" >
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span *ngIf="user">Ви впевнені що хочете видалити користувача <b>{{user.email}}</b>?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Ні"
+                    (click)="deleteUserDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Так"
+                    (click)="confirmDelete()"></button>
+            </ng-template>
+        </p-dialog>
+
+	</div>
+</div>

@@ -1,0 +1,81 @@
+<div class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
+    <div class="flex flex-column align-items-center justify-content-center">
+        <div
+            style="border-radius:56px; padding:0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%);">
+            <div class="w-full surface-card py-3 px-4 sm:px-8" style="border-radius:53px">
+                <div class="text-center mb-4">
+                    <p-toast></p-toast>
+                    <div class="text-900 text-3xl font-medium mb-2">Реєстрація</div>
+                    <span class="text-600 font-medium">Заповніть дані</span>
+                </div>
+                <form [formGroup]="registerForm" (submit)="register()">
+                        <div class="form-group">
+                        <label for="firstname1" class="block text-900 text-xl font-medium mb-2">Прізвище</label>
+                        <input id="lastname1" type="text" placeholder="Last name" pInputText
+                            class="w-full md:w-30rem mb-2" style="padding:1rem" formControlName="lastName">
+                        <div class="alert alert-danger error-message"
+                            *ngIf="registerFormControl['lastName'].touched && registerFormControl['lastName'].errors?.['required']">
+                            Це поле є обов'язковим
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="firstname1" class="block text-900 text-xl font-medium mb-2">Ім'я</label>
+                        <input id="firstname1" type="text" placeholder="First name" pInputText
+                            class="w-full md:w-30rem mb-2" style="padding:1rem" formControlName="firstName">
+                        <div class="alert alert-danger error-message"
+                            *ngIf="registerFormControl['firstName'].touched && registerFormControl['firstName'].errors?.['required']">
+                            Це поле є обов'язковим
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email1" class="block text-900 text-xl font-medium mb-2">Електронна пошта</label>
+                        <input id="email1" type="text" placeholder="Email address" pInputText
+                            class="w-full md:w-30rem mb-2" style="padding:1rem" formControlName="email">
+                        <div class="alert alert-danger error-message"
+                            *ngIf="registerFormControl['email'].touched && registerFormControl['email'].errors?.['required']">
+                            Це поле є обов'язковим
+                        </div>
+                        <div class="alert alert-danger error-message"
+                            *ngIf="registerFormControl['email'].touched && registerFormControl['email'].errors?.['email']">
+                            Введіть правильну електронну пошту
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password1" class="block text-900 font-medium text-xl mb-2">Пароль</label>
+                        <p-password id="password1" placeholder="Password" [toggleMask]="true" [feedback]="false" styleClass="mb-2"
+                            inputStyleClass="w-full p-3 md:w-30rem" formControlName="password"></p-password>
+                        <div class="alert alert-danger error-message"
+                            *ngIf="registerFormControl['password'].touched && registerFormControl['password'].errors?.['required']">
+                            Це поле є обов'язковим
+                        </div>
+                        <div class="alert alert-danger error-message"
+                            *ngIf="registerFormControl['password'].touched && registerFormControl['password'].errors?.['pattern']">
+                            Пароль повинен містити мінімум 8 символів,<br>
+                            мінімум одну букву верхнього регістру, цифру та символ
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmedPassword1" class="block text-900 font-medium text-xl mb-2">Підтвердіть
+                            пароль</label>
+                        <p-password id="confirmedPassword1" placeholder=" Confirm password" [toggleMask]="true" [feedback]="false" styleClass="mb-2"
+                            inputStyleClass="w-full p-3 md:w-30rem" formControlName="cofirmedPassword" ></p-password>
+                        <div class="alert alert-danger error-message"
+                            *ngIf="registerFormControl['cofirmedPassword'].touched && registerFormControl['cofirmedPassword'].errors?.['required']">
+                            Це поле є обов'язковим
+                        </div>
+                        <div class="alert alert-danger error-message"
+                        *ngIf="registerFormControl['cofirmedPassword'].touched && registerFormControl['cofirmedPassword'].errors?.['passwords_do_not_match']">
+                        Паролі не співпадають
+                    </div>
+                    </div>
+                    <p></p>
+                    <div>
+                        <button type="submit" pButton pRipple label="Зареєструватись"
+                            class="w-full p-3 text-xl"></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
